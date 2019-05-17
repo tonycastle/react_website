@@ -2,26 +2,28 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
-class Square extends React.Component {
-  render() {
-    return (
-      <button className="square" onClick={this.props.onClick}>
-        {this.props.value}
-      </button>
-    );
-  }
+function Square(props) {
+  return (
+    <button className="square" onClick={props.onClick}>
+      {props.value}
+    </button>
+  );
 }
 
 class Board extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { squares: Array(9).fill(null) };
+    this.state = { squares: Array(9).fill(null), xIsNext: true };
   }
 
   handleClick(i) {
     let tmp = this.state.squares;
-    tmp[i] = "X";
-    this.setState({ squares: tmp });
+    //update the state array with the value depending whose turn it is
+    tmp[i] = this.state.xIsNext ? "X" : "O";
+    this.setState({
+      squares: tmp,
+      xIsNext: !this.state.xIsNext //toggle the boolean value
+    });
   }
 
   renderSquare(i) {
@@ -34,7 +36,7 @@ class Board extends React.Component {
   }
 
   render() {
-    const status = "Next player: X";
+    const status = `Next player: ${this.state.xIsNext ? "X" : "O"}`;
 
     return (
       <div>
